@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Catálogo de Libros</title>
+</head>
+<body>
+    <h1>Catálogo de Libros</h1>
+    <form action="/libros/buscar" method="get">
+        <input type="text" name="query" placeholder="Buscar por título">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Disponible</th>
+            <th>Acciones</th>
+        </tr>
+        <tr th:each="libro : ${libros}">
+            <td th:text="${libro.titulo}">Título</td>
+            <td th:text="${libro.autor}">Autor</td>
+            <td th:text="${libro.disponible ? 'Sí' : 'No'}">Disponible</td>
+            <td>
+                <form th:action="@{/prestamos/solicitar}" method="post">
+                    <input type="hidden" name="libroId" th:value="${libro.id}"/>
+                    <input type="text" name="usuario" placeholder="Usuario" required/>
+                    <button type="submit" th:disabled="${!libro.disponible}">Solicitar</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
